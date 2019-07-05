@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 import axios from "axios";
-import { Card, Grid, Divider, Search } from "semantic-ui-react";
+import { Card, Grid, Divider, Search, Button, List, Icon } from "semantic-ui-react";
 
 class MainPage extends Component {
 	constructor(props) {
@@ -19,7 +19,7 @@ class MainPage extends Component {
     
     componentDidUpdate = (prevProps, prevState) => {
 		if (prevState.results !== this.state.results) {
-			if (this.state.results && this.state.results.length > 0) {
+			if (this.state.results) {
                 let docs = [];
                 for(var i = 0; i< this.state.results.length; ++i) {
                     let doc = this.state.results[i];
@@ -54,6 +54,8 @@ class MainPage extends Component {
 		this.setState({ loading: true });
 		axios.get(`/autocomplete/${this.state.query}`).then(res => {
             this.setState({ results: res.data, loading: false });
+        }).catch(err => {
+            this.setState({ results: [], useResults: [], loading: false });
         });
 	};
     
@@ -83,13 +85,42 @@ class MainPage extends Component {
                             value={query}
                         />
                         <Divider />
+                        <Button icon="close" content="Clear" floated="right" onClick={() => this.setState({ doc: [] })} />
+                        <br /><br /><br />
                         <div>
                             {doc && doc.length > 0 && (
                                 <Card color="blue" fluid>
                                     <Card.Content>
                                         <Card.Header>{doc[0].name}</Card.Header>
-                                        <Card.Meta>{doc[0].rating}</Card.Meta>
-                                        <Card.Description>Cast: {doc[0].cast}</Card.Description>
+                                        <Card.Meta>
+                                            <Icon name="star" color="blue" />{" "}{doc[0].rating}
+                                        </Card.Meta>
+                                        <Card.Description>{doc[0].desc}</Card.Description>
+                                    </Card.Content>
+                                    <Card.Content extra>
+                                        <List relaxed>
+                                            <List.Item>
+                                            <Icon name="certificate" color="blue" />{" "}{doc[0].certificate !== "Not Rated" ? doc[0].certificate : "No Certificate"}
+                                            </List.Item>
+                                            <List.Item>
+                                            <Icon name="clock" color="blue" />{" "}{doc[0].runtime}
+                                            </List.Item>
+                                            <List.Item>
+                                            <Icon name="tag" color="blue" />{" "}{doc[0].genre}
+                                            </List.Item>
+                                            <List.Item>
+                                                <Icon name="film" color="blue" />{" "}{doc[0].director}
+                                            </List.Item>
+                                            <List.Item>
+                                                <Icon name="users" color="blue" />{" "}{doc[0].cast}
+                                            </List.Item>
+                                            <List.Item>
+                                                Votes: {doc[0].votes !== "-1" ? doc[0].votes : "No data"}
+                                            </List.Item>
+                                            <List.Item>
+                                                <Icon name="dollar" color="blue" />{" "}{doc[0].gross !== "-1" ? doc[0].gross.substr(1,doc[0].length) : "No data"}
+                                            </List.Item>
+                                        </List>
                                     </Card.Content>
                                 </Card>
                             )}

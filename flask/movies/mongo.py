@@ -37,7 +37,7 @@ def fetch_movie(movie_id):
     res = []
 
     for movie in movies.find({ "_id": ObjectId(movie_id) }):
-        res.append({ "name": movie["movie_title"], "rating": movie["rating"], "cast": movie["stars"] })
+        res.append({ "name": movie["movie_title"], "rating": movie["rating"], "cast": movie["stars"], "year": str(movie["year"]), "movie_img": movie["movie_img"], "genre": movie["genre"], "imdb_id": movie["imdb_id"], "certificate": movie["certificate"], "runtime": movie["runtime"], "metascore": str(movie["metascore"]), "desc": movie["description"], "director": movie["director"], "votes": movie["votes"], "gross": movie["gross"]  })
 
     return jsonify(res)
 
@@ -47,8 +47,7 @@ def autocomplete(prefix):
     docs = []
     
     for movie in movies.find({ "$or": [ {"movie_title":{"$regex": "^"+prefix[0].upper()+prefix[1:]}}, {"movie_title":{"$regex": "^"+prefix.lower()}}, {"movie_title":{"$regex": "^"+prefix.upper()}}, {"movie_title":{"$regex": "^"+prefix}} ] }).sort([( "rating", -1 )]).limit(5):
-    # for movie in movies.find({"movie_title": { "$regex": "^"+prefix } }):
-        docs.append({ "id": str(movie["_id"]), "name": movie["movie_title"], "rating": str(movie["rating"]), "cast": movie["stars"] })
+        docs.append({ "id": str(movie["_id"]), "name": movie["movie_title"], "rating": str(movie["rating"]), "cast": movie["stars"]})
 
     return jsonify(docs)
 

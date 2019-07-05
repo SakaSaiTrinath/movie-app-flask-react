@@ -6,6 +6,7 @@ fd = open("imdb_top_1000_movies.csv", "w")
 fd.write("imdb_id, movie_title, year, movie_img, certificate, runtime, genre, rating, metascore, description, director, stars, votes, gross\n")
 
 for page in range(0,10):
+    print(page, " started")
     url = 'https://www.imdb.com/search/title/?groups=top_1000&sort=user_rating,desc&count=100&start='+str(page)+'01'
 
     # read html from website using url
@@ -49,12 +50,12 @@ for page in range(0,10):
         try:
             nums = small_texts[3].findAll("span", {"name":"nv"})
             try:
-                votes = nums[0]["data-value"]
+                votes = nums[0].text.replace(",","_")
             except:
                 votes = '-1'
             
             try:
-                gross = nums[1]["data-value"].strip().replace(',','')
+                gross = nums[1].text
             except:
                 gross = '-1'
         except:
