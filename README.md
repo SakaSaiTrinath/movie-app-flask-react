@@ -27,8 +27,7 @@ This is a movie search app allows us to search movies based on the data scrapped
 
 ## Steps to reproduce project
 * Download the zip folder of project and extract.
-* Import the data of imdb_top_1000_movies.csv into mongodb database by running "mongoimport --db moviedata --collection movies  --jsonArray  imdb_top_1000_movies.csv".
-* Run the "mongod" command to listen for mongodb instance.
+* Import the data of imdb_top_1000_movies.json into mongodb database by running "mongoimport --db moviedata --collection movies  --jsonArray  imdb_top_1000_movies.json".
 * Goto reactapp directory in cmd and run "yarn install", then "yarn start".
 * Goto flask/env/Scripts directory, activate the virtual environment by running "activate" command.
 * then Goto flask/movies directory, run "python mongo.py".
